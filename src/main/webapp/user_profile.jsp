@@ -97,7 +97,7 @@
     </div>
     <footer class="footer text-white py-4 bg-success">
         <div class="container text-center">
-            <p>&copy; 2024 Healthcare System. All Rights Reserved.</p>
+            <p>&copy; 2026 Patient Appointment and Sheduling System. All Rights Reserved.</p>
         </div>
     </footer>
 </body>

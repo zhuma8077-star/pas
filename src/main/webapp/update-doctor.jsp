@@ -1,6 +1,12 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="com.clinic.util.DBConnection" %>
+<%@ page import="com.clinic.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%
+    User user = (session != null) ? (User) session.getAttribute("user") : null;
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,11 +28,54 @@
 </head>
 <body>
 
+<!-- ✅ Navbar Added -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container">
+        <a class="navbar-brand" href="index.jsp">
+            <i class="fas fa-clinic-medical"></i> Clinic System
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.jsp"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="doctors.jsp"><i class="fas fa-user-md"></i> Doctors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.jsp"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_appointment.jsp"><i class="fas fa-list"></i> My Appointments</a>
+                </li>
+
+                <% if (user == null) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.jsp"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link">👋 <%= user.getFullname() %></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="LogoutServlet">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <%
     request.setCharacterEncoding("UTF-8");
     String id = request.getParameter("id");
 
-    // Form submitted -> update
     if ("POST".equalsIgnoreCase(request.getMethod())) {
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "UPDATE appointments SET patient_name=?, patient_contact=?, patient_email=?, appointment_date=?, appointment_time=? WHERE id=?";
@@ -45,7 +94,6 @@
         }
     }
 
-    // Load appointment data
     String patientName="", patientContact="", patientEmail="", appointmentDate="", appointmentTime="";
     if(id != null){
         try(Connection conn = DBConnection.getConnection()){

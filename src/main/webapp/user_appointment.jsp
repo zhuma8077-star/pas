@@ -175,7 +175,7 @@
 </div>
 
 <footer>
-    <p>&copy; 2025 Patient Appointment System | All Rights Reserved</p>
+    <p>&copy; 2026 Patient Appointment and Sheduling System | All Rights Reserved</p>
 </footer>
 
 </body>

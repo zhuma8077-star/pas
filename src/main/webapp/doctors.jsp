@@ -153,7 +153,7 @@
 
 
     <footer class="footer bg-success text-white py-4 text-center">
-        <p>&copy; 2024 Healthcare System. All Rights Reserved.</p>
+        <p>&copy; 2026 Patient Appointment and Sheduling System. All Rights Reserved.</p>
     </footer>
 </body>
 </html>

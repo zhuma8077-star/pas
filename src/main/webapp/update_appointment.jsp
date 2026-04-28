@@ -55,15 +55,44 @@
 
     <form method="post" action="">
         <input type="hidden" name="id" value="<%=id%>">
+
+        <!-- ✅ UPDATED Doctor Dropdown FROM DATABASE -->
         <div class="form-group">
             <label>Doctor</label>
             <select name="doctor" class="form-control" required>
-                <option value="Dr. Sarah Ahmed" <%= "Dr. Sarah Ahmed".equals(doctor) ? "selected" : "" %>>Dr. Sarah Ahmed</option>
-                <option value="Dr. Usman Ali" <%= "Dr. Usman Ali".equals(doctor) ? "selected" : "" %>>Dr. Usman Ali</option>
-                <option value="Dr. Hina Farooq" <%= "Dr. Hina Farooq".equals(doctor) ? "selected" : "" %>>Dr. Hina Farooq</option>
-                <option value="Dr. Yasir Khan" <%= "Dr. Yasir Khan".equals(doctor) ? "selected" : "" %>>Dr. Yasir Khan</option>
+                <option value="">-- Select Doctor --</option>
+                <%
+                    Connection con2 = null;
+                    PreparedStatement ps2 = null;
+                    ResultSet rs2 = null;
+
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        con2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/pas","root","root");
+
+                        ps2 = con2.prepareStatement("SELECT name FROM doctors");
+                        rs2 = ps2.executeQuery();
+
+                        while(rs2.next()){
+                            String dbDoctor = rs2.getString("name");
+                %>
+                            <option value="<%=dbDoctor%>"
+                                <%= dbDoctor.equals(doctor) ? "selected" : "" %>>
+                                <%=dbDoctor%>
+                            </option>
+                <%
+                        }
+                    } catch(Exception e){
+                        out.println(e);
+                    } finally {
+                        try { if(rs2!=null) rs2.close(); } catch(Exception e){}
+                        try { if(ps2!=null) ps2.close(); } catch(Exception e){}
+                        try { if(con2!=null) con2.close(); } catch(Exception e){}
+                    }
+                %>
             </select>
         </div>
+
         <div class="form-group">
             <label>Date</label>
             <input type="date" name="appointmentDate" class="form-control" value="<%=date%>" required>
@@ -81,7 +110,6 @@
 </div>
 
 <%
-    // Update appointment logic within JSP
     if(request.getMethod().equalsIgnoreCase("POST")){
         try{
             String newDoctor = request.getParameter("doctor");
@@ -99,6 +127,7 @@
             ps.setInt(5,id);
             int updated = ps.executeUpdate();
             con.close();
+
             if(updated > 0){
                 response.sendRedirect("user_appointment.jsp?message=Appointment+updated+successfully");
             }else{

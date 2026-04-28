@@ -84,7 +84,7 @@
 <!-- Footer -->
 <footer class="footer text-white py-4 text-center">
     <div class="container">
-        <p>&copy; 2025 Healthcare System. All Rights Reserved.</p>
+        <p>&copy; 2026 Patient Appointment and Sheduling System. All Rights Reserved.</p>
     </div>
 </footer>
 

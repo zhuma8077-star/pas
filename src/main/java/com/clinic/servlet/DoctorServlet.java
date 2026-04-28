@@ -30,7 +30,7 @@ public class DoctorServlet extends HttpServlet {
         System.out.println("Method is : "+_method);
         if(_method!=null&&_method.equals("DELETE")){
             doDelete(request,response);
-            response.sendRedirect("doctors_dashboard.jsp?success=true");
+            response.sendRedirect("doctors-dashboard.jsp?success=true");
             return;
         }else if(_method!=null&&_method.equals("PUT")){
             doPut(request,response);

@@ -68,7 +68,6 @@
         if ("true".equals(success)) {
     %>
         <script>
-            // redirect directly to My Appointments page
             window.location.href = "user_appointment.jsp?message=Appointment booked successfully!";
         </script>
     <%
@@ -91,36 +90,41 @@
                 <div class="card appointment-card">
                     <div class="card-body">
                         <form action="AppointmentServlet" method="POST">
-                            <!-- Doctor Input Field with datalist -->
+
+                            <!-- ✅ UPDATED Doctor Dropdown -->
                             <div class="form-group">
-                                <label for="doctorInput">Choose Doctor</label>
-                                <input list="doctorList" class="form-control" name="doctor" id="doctorInput"
-                                       placeholder="Select doctor" required>
-                                <datalist id="doctorList">
+                                <label for="doctorSelect">Choose Doctor</label>
+                                <select class="form-control" name="doctor" id="doctorSelect" required>
+                                    <option value="">-- Select Doctor --</option>
                                     <%
                                         Connection con2 = null;
-                                        Statement stmt2 = null;
+                                        PreparedStatement ps2 = null;
                                         ResultSet rs2 = null;
+
                                         try {
                                             Class.forName("com.mysql.cj.jdbc.Driver");
                                             con2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/pas", "root", "root");
-                                            stmt2 = con2.createStatement();
-                                            rs2 = stmt2.executeQuery("SELECT name FROM doctors");
+
+                                            String query = "SELECT name FROM doctors";
+                                            ps2 = con2.prepareStatement(query);
+                                            rs2 = ps2.executeQuery();
+
                                             while (rs2.next()) {
-                                                String name = rs2.getString("name");
                                     %>
-                                                <option value="<%= name %>">
+                                                <option value="<%= rs2.getString("name") %>">
+                                                    <%= rs2.getString("name") %>
+                                                </option>
                                     <%
                                             }
                                         } catch(Exception e) {
                                             e.printStackTrace();
                                         } finally {
                                             try { if(rs2!=null) rs2.close(); } catch(Exception e){}
-                                            try { if(stmt2!=null) stmt2.close(); } catch(Exception e){}
+                                            try { if(ps2!=null) ps2.close(); } catch(Exception e){}
                                             try { if(con2!=null) con2.close(); } catch(Exception e){}
                                         }
                                     %>
-                                </datalist>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -155,7 +159,7 @@
 
     <footer class="footer text-white text-center">
         <div class="container">
-            <p>&copy; 2024 Healthcare System. All Rights Reserved.</p>
+            <p>&copy; 2026 Patient Appointment and Sheduling  System. All Rights Reserved.</p>
         </div>
     </footer>
 
